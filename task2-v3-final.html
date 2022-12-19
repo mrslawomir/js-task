@@ -1,0 +1,58 @@
+<script>
+/*
+  Implement missing getRange(startsWithValue, endsWithValue) function
+      which returns the shortest matching part of original array
+*/
+Array.prototype.getRange = function (startsWithValue, endsWithValue) {
+  //debugger;
+	const elements = this,
+  			searchStart = elements.indexOf(startsWithValue),
+        searchEnd = elements.lastIndexOf(endsWithValue);
+  let result = [];
+  if(searchStart === -1 || searchEnd === -1 || searchEnd < searchStart ) return result;
+  /*
+  First step is to check if the start and end values are present. 
+  If one of them is not, or if if the start value has an index higher than the end value, 
+  no useful range can be extracted and we return an empty array.
+  Should none of these disqualifying conditions be true, we can not only proceed with the search,
+  but we also have narrowed down the seach area by finding the edge start and ending positions.
+  (we don't need to run the loop until the end of the elements array)
+  */
+  for(let i = searchStart; i < searchEnd; i++) {
+    if(elements[i] != startsWithValue) continue;
+    let startIndex = i,
+        endIndex = elements.indexOf(endsWithValue, startIndex+1),
+        frag;
+    /*
+    Checking if a viable "end" value has been found in the remainder of the array. 
+    If not, we terminate any further loop iterations.
+    */
+    if(endIndex === -1) break;
+    /*
+    We slice out the matching range. If we don't have any other candidate results or if it's the shortest one yet
+    the new range is assigned as the temporary result.
+    */
+    frag = elements.slice(startIndex, endIndex+1);
+    if(result.length == 0 || (result.length > frag.length) ) result = frag;
+  }
+  /*
+  The function returns a range that we found or if there were none matching - an empty array.
+  */
+  return result;
+}
+
+</script>
+
+<!-- do not edit -->
+<div id="expected">EXPECTED: a, b, c, d, e, f, g, f, g, h => c, d, e, f</div>
+<div id="output">CURRENT: </div>
+<script>
+var output = document.getElementById('output');
+var items = 'abcdefgfgh'.split('');
+
+output.textContent += items.join(', ') + ' => ';
+
+try {
+    output.textContent += items.getRange('c', 'f').join(', ');
+} catch(e) {}
+</script>

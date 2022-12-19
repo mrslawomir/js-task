@@ -1,0 +1,37 @@
+<script>
+/*
+  Implement missing getRange(startsWithValue, endsWithValue) function
+      which returns the shortest matching part of original array
+*/
+Array.prototype.getRange = function (startsWithValue, endsWithValue) {
+	const elements = this,
+  		  startIndex = elements.indexOf(startsWithValue),
+        endIndex = elements.indexOf(endsWithValue);
+        //We check for indexes of start and end values. If one or none are present, the range is considered not found and empty array is returned.
+        if(startIndex === -1 || endIndex === -1) return [];
+        //If both are present we create a slice of the array and return it
+        return elements.slice(startIndex, endIndex+1);
+        /*
+        While simple, this solution is incorrect, as it only returns the first matching range of the array, which is not necessarily the shortest one.
+
+        *Note* - there is no failsafe in case where the "end value" occurs before the "start value" as the indexOf search starts in both cases from the start. 
+        To resolve this particular issue, the search of endIndex should start from startIndex+1
+        endIndex = elements.indexOf(endsWithValue, startIndex+1);
+        */
+}
+
+</script>
+
+<!-- do not edit -->
+<div id="expected">EXPECTED: a, b, c, d, e, f, g, f, g, h => c, d, e, f</div>
+<div id="output">CURRENT: </div>
+<script>
+var output = document.getElementById('output');
+var items = 'abcdefgfghcf'.split('');
+
+output.textContent += items.join(', ') + ' => ';
+
+try {
+    output.textContent += items.getRange('c', 'f').join(', ');
+} catch(e) {}
+</script>

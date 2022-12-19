@@ -1,0 +1,53 @@
+<script>
+/*
+  Implement missing getRange(startsWithValue, endsWithValue) function
+      which returns the shortest matching part of original array
+*/
+
+/*
+Modifying build-in JS objects can lead to unintended consequences. As such, a safer approach would be to extend the base Array class and add the new method there. 
+*/
+class RangedArray extends Array {
+  getRange (startsWithValue, endsWithValue) {
+    const elements = this,
+          searchStart = elements.indexOf(startsWithValue),
+          searchEnd = elements.lastIndexOf(endsWithValue);
+    let result = [];
+    if(searchStart === -1 || searchEnd === -1 || searchEnd < searchStart ) return result;
+
+    for(let i = searchStart; i < searchEnd; i++) {
+      if(elements[i] != startsWithValue) continue;
+      let startIndex = i,
+          endIndex = elements.indexOf(endsWithValue, startIndex+1),
+          frag;
+
+      if(endIndex === -1) break;
+
+      frag = elements.slice(startIndex, endIndex+1);
+      if(result.length == 0 || (result.length > frag.length) ) result = frag;
+    }
+
+    return result;
+  }
+}
+
+
+
+</script>
+
+<!-- do not edit -->
+<div id="expected">EXPECTED: a, b, c, d, e, f, g, f, g, h => c, d, e, f</div>
+<div id="output">CURRENT: </div>
+<script>
+
+var output = document.getElementById('output');
+/*
+Need to use the constructor of the new array type
+*/
+var items = new RangedArray(...'abcdefgfgh'.split(''));
+output.textContent += items.join(', ') + ' => ';
+
+try {
+    output.textContent += items.getRange('c', 'f').join(', ');
+} catch(e) {console.log(e);}
+</script>

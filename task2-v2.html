@@ -1,0 +1,78 @@
+<script>
+/*
+  Implement missing getRange(startsWithValue, endsWithValue) function
+      which returns the shortest matching part of original array
+*/
+Array.prototype.getRange = function (startsWithValue, endsWithValue) {
+	const elements = this, elLength = elements.length, result = [],
+  			start = elements.indexOf(startsWithValue);
+        if(start==-1) return result;
+        /*
+        We start the search by searching for the first occurence of the start value. 
+        If the start value is not present in the array, the range cannot be calculated, 
+        so we return an empty result. 
+
+        *Note* - this check should also apply to the "endsWithValue", as we can't complete the range without the end value.
+        end = elements.lastIndexOf(startsWithValue);
+        if(start == -1 || end == -1) return result;
+        */    
+
+
+
+        for(let i = start; i<elLength; i++) {
+          /*
+          Starting from the initial location, we iterate over the array checking if the current element is the "start" value.
+          If not, the iteration is skipped.
+
+          *Note* - since we start from a known "start" value index, the following if() will always evaluate to false. While it might seem
+          as a waste, this only occurs once and construct is both simple and readable, so it seems worth the tradeoff. 
+          */
+        	if(elements[i] != startsWithValue) continue;
+          let startIndex = i,
+          		endIndex = elements.indexOf(endsWithValue, startIndex+1),
+              frag;
+          console.log(`Start: ${startIndex}, End: ${endIndex}`);
+          /*
+          From the current "start" value position we check if we can find an available "end" value. 
+          
+          *Note* - the following check should test if we can locate a matching "end" value for the currently found "start". While simple, it's not a good approach:
+          - we already know that the "start" value is present, so the "startIndex === -1" check is redundant
+          - if a matching end value can't be found, it means that any further iterations of this loop won't result in a matching range
+          A more suitable soution would be:
+          if(endIndex === -1) break;
+          */
+          if(startIndex === -1 || endIndex === -1) continue;
+          frag = elements.slice(startIndex, endIndex+1);
+          if(result.length == 0 || (result.length > frag.length) ) result = frag;
+          /*
+          If no ranges have been found (result array empty) or if the range found in previous iterations is longer than what has been found now, 
+          we replace the result with the new, shorter array.
+
+          *Note* - the "result = frag" assignment causes a TypeError, as the "result" array has been mistakenly declared as a const. 
+          The invocation of the getRange method is wrapped in a try/catch statement without an error handler, which obfuscated the issue and could only be observed
+          with the use of the debugger.
+          Solutions:
+          - declare the variable using let/var keyword:
+          let result = []
+          - instead of assigning the value directly, change the elements inside the array, which is not blocked via a "const" declaration:
+          if(result.length == 0 || (result.length > frag.length) ) result.splice(0, result.length, ...frag)
+          */          
+        }
+        return result;
+}
+
+</script>
+
+<!-- do not edit -->
+<div id="expected">EXPECTED: a, b, c, d, e, f, g, f, g, h => c, d, e, f</div>
+<div id="output">CURRENT: </div>
+<script>
+var output = document.getElementById('output');
+var items = 'abcdefgfghcf'.split('');
+
+output.textContent += items.join(', ') + ' => ';
+
+try {
+    output.textContent += items.getRange('c', 'f').join(', ');
+} catch(e) {}
+</script>
