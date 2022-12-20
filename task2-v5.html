@@ -1,0 +1,45 @@
+<script>
+	/*
+	  Implement missing getRange(startsWithValue, endsWithValue) function
+		  which returns the shortest matching part of original array
+	*/
+	Array.prototype.getRange = function (startsWithValue, endsWithValue) {
+	  //debugger;
+		const elements = this,
+			searchStart = elements.indexOf(startsWithValue),
+			searchEnd = elements.lastIndexOf(endsWithValue);
+	  let result = [], progressIndex, endIndex;
+	  if(searchStart === -1 || searchEnd === -1 || searchEnd < searchStart ) return result;
+	  
+	  progressIndex = searchStart;
+	  while(progressIndex < searchEnd) {
+		let endIndex = elements.indexOf(endsWithValue, progressIndex + 1),
+			frag;
+		if(endIndex === -1) break;
+		frag = elements.slice(progressIndex, endIndex+1);
+		if(result.length == 0 || (result.length > frag.length) ) result = frag;
+
+		//checking for next iteration, looking from a new start value
+		progressIndex = elements.indexOf(startsWithValue, progressIndex + 1);
+		//if not found or out of bounds - finish the search loop
+		if(progressIndex == -1 || progressIndex >= searchEnd) break;
+	  }
+
+	  return result;
+	}
+	
+	</script>
+	
+	<!-- do not edit -->
+	<div id="expected">EXPECTED: a, b, c, d, e, f, g, f, g, h => c, d, e, f</div>
+	<div id="output">CURRENT: </div>
+	<script>
+	var output = document.getElementById('output');
+	var items = 'abcdefgfgh'.split('');
+	
+	output.textContent += items.join(', ') + ' => ';
+	
+	try {
+		output.textContent += items.getRange('c', 'f').join(', ');
+	} catch(e) {}
+	</script>

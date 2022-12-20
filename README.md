@@ -11,3 +11,6 @@ Reworked and improved approach based on observations from v1 & v2
 ## task2-v4-extra
 Bonus, just for fun.  
 Works around the issue of modifying the base Array type (while bending the rules of the task by modifying the disallowed section)
+## task2-v5
+Bonus, just for fun.  
+Same concept as v3, but structured inside a "while" loop.
